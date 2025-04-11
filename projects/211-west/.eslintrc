@@ -1,0 +1,23 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "react"],
+  // "extends": ["serverless-stack"],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-var-requires": [
+      "off",
+      { "meta": { "hasSuggestions": true } }
+    ]
+  },
+  "globals": {
+    "react": "writable"
+  },
+  "settings": {
+    "react": {
+      "version": "detect",
+      "pragma": "react"
+    }
+  }
+}

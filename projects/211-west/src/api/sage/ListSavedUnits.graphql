@@ -1,0 +1,18 @@
+query ListSavedUnit(
+  $userId: String!
+  $applicationId: String!
+  $propertyId: String!
+) {
+  savedUnit(
+    userId: $userId
+    applicationId: $applicationId
+    propertyId: $propertyId
+  ) {
+    id
+    userId
+    unitId
+    propertyId
+    componentId
+    applicationId
+  }
+}

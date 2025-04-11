@@ -1,0 +1,9 @@
+export const RESIDENCE_COLUMNS = [
+  'STATUS',
+  'UNIT',
+  'FLOOR',
+  'INTERIOR_SQFT',
+  'EXTERIOR_SQFT',
+  'BEDROOMS',
+  'BATHROOMS'
+];

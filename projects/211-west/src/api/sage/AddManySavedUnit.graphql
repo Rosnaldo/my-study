@@ -1,0 +1,10 @@
+mutation AddManySavedUnit($input: SavedManyUnitInput) {
+  savedManyUnit(input: $input) {
+    id
+    userId
+    unitId
+    propertyId
+    componentId
+    applicationId
+  }
+}

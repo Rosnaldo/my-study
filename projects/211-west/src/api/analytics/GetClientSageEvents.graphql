@@ -1,0 +1,7 @@
+query QueryClientSageEvents($input: QueryClientSageEventsInput!) {
+  queryClientSageEvents(input: $input) {
+    eventType
+    timestamp
+    payload
+  }
+}

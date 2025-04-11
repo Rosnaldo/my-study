@@ -1,0 +1,10 @@
+mutation DeleteManySavedUnit($input: DeleteManyUnitInput) {
+  deleteManySavedUnit(input: $input) {
+    id
+    userId
+    unitId
+    propertyId
+    componentId
+    applicationId
+  }
+}

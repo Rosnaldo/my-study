@@ -1,0 +1,9 @@
+mutation SendShareUnitEmail(
+  $applicationId: String!
+  $input: SendShareUnitEmailInput!
+) {
+  sendShareUnitEmail(applicationId: $applicationId, input: $input) {
+    success
+    message
+  }
+}

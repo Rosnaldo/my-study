@@ -1,0 +1,27 @@
+query GetClient($applicationId: String!, $agentId: String!, $id: String!) {
+  client(applicationId: $applicationId, agentId: $agentId, id: $id) {
+    id
+    firstName
+    lastName
+    email
+    agentId
+    applicationId
+    brokerId
+    phone
+    company
+    street
+    city
+    country
+    state
+    firstVisit
+    hearAboutUs
+    savedUnits {
+      id
+      userId
+      unitId
+      propertyId
+      componentId
+      applicationId
+    }
+  }
+}

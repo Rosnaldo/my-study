@@ -1,0 +1,7 @@
+query ListDevices($applicationId: String!) {
+  devices(applicationId: $applicationId) {
+    id
+    name
+    connectionId
+  }
+}

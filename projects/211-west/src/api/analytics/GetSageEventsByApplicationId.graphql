@@ -1,0 +1,10 @@
+query GetSageEventsByApplicationId($applicationId: String!) {
+  querySageEventsByApplicationId(applicationId: $applicationId) {
+    timestamp
+    client {
+      id
+    }
+    eventType
+    payload
+  }
+}

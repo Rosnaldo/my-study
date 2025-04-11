@@ -1,0 +1,124 @@
+query QueryProperty($applicationId: String!, $id: String!) {
+  property(applicationId: $applicationId, id: $id) {
+    id
+    name
+    image
+    components {
+      id
+      name
+      address {
+        addressLine1
+        addressLine2
+        city
+        province
+        postalCode
+        countryCode
+        region
+      }
+      unitModels {
+        id
+        name
+        bedrooms
+        halfBedrooms
+        bathrooms
+        halfBathrooms
+        interiorArea
+        exteriorArea
+      }
+      units {
+        id
+        name
+        unitModelId
+        salesStatus
+        unitViews
+        pricingInternal
+        pricingExternal
+        floor {
+          id
+          name
+          keyPlan {
+            name
+            media
+            minimap {
+              svgUrl
+              unitModelGroups {
+                groupId
+                externalIds
+              }
+            }
+          }
+        }
+        featureCollections {
+          name
+          features
+        }
+        sage {
+          customAttributes {
+            name
+            value
+          }
+        }
+      }
+      floors {
+        id
+        name
+      }
+      keyPlans {
+        id
+        name
+        media
+        minimap {
+          svgUrl
+          unitModelGroups {
+            groupId
+            externalIds
+          }
+        }
+      }
+      amenities {
+        id
+        name
+        description
+      }
+      orbitReels {
+        id
+        label
+        colorMap {
+          color
+          label
+          status
+          currentUnit
+        }
+      }
+      pointsOfInterestCollections {
+        id
+        name
+        points {
+          name
+          color
+        }
+      }
+      controlCategories {
+        id
+        name
+        enableCommand
+        disableCommand
+      }
+    }
+    amenities {
+      id
+      name
+      description
+    }
+    orbitReels {
+      id
+      label
+    }
+    controlCategories {
+      id
+      name
+      enableCommand
+      disableCommand
+    }
+  }
+}

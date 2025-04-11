@@ -1,0 +1,8 @@
+query ListAmenities($applicationId: String!) {
+  amenities(applicationId: $applicationId) {
+    id
+    propertyId
+    name
+    description
+  }
+}

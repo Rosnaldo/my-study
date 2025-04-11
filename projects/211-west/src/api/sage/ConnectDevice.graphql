@@ -1,0 +1,8 @@
+mutation ConnectDevice($input: ConnectDeviceInput!) {
+  connectDevice(input: $input) {
+    id
+    name
+    connectionId
+    applicationId
+  }
+}

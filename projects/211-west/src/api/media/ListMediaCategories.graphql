@@ -1,0 +1,14 @@
+query ListPropertyCategories($propertyId: String!, $name: String) {
+  mediaCategories(propertyId: $propertyId, name: $name) {
+    id
+    name
+
+    medias {
+      id
+      title
+      showTitle
+      url
+      key
+    }
+  }
+}

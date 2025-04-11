@@ -1,0 +1,125 @@
+{
+  "name": "@evolutionv/211-west",
+  "version": "1.0.2",
+  "private": true,
+  "sageCi": {
+    "active": true,
+    "ios": true,
+    "windows": true,
+    "mac": true,
+    "customParameters": {
+      "xcodeproj_name": "211West",
+      "keychain_name": "211West",
+      "orbit_reel_bundle_id": "211-west"
+    }
+  },
+  "main": "./app/main",
+  "dependencies": {
+    "@koa/cors": "^4.0.0",
+    "@koa/router": "^12.0.0",
+    "@material-ui/core": "^4.12.0",
+    "@material-ui/icons": "^4",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "dotenv": "^16.0.3",
+    "koa": "^2.13.4",
+    "node-osc": "^8.0.6",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-router": "^6.4.3",
+    "react-router-dom": "^6.4.3",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4",
+    "zustand": "^4.3.8"
+  },
+  "scripts": {
+    "start": "yarn buildTemplateWeb; yarn build:externals; DEBUG=true PORT=3074 craco start",
+    "start:electron": "PLATFORM=companion yarn buildTemplateNative; OUTPUT_DIR=app yarn build:externals; DEBUG=true node --max_old_space_size=8192 config/start.js",
+    "build": "yarn buildTemplateWeb; yarn build:externals; STAGE=$STAGE yarn build:sst",
+    "build:sst": "yarn buildTemplateWeb; STAGE=$STAGE yarn getSecrets && tsc --noEmit && SST_BUILD_CONCURRENCY=1 sst build --stage=$STAGE",
+    "build:test": "STAGE=$STAGE yarn getSecrets; yarn buildTemplateWeb; craco build",
+    "build:ipad": "PLATFORM=ipad yarn buildTemplateNative; yarn build:externals; STAGE=$STAGE yarn getSecrets && yarn preBuildIOS; NODE_OPTIONS='--max_old_space_size=8192' cordova build ios --device --verbose --buildConfig --release",
+    "build:windows": "cross-env PLATFORM=companion yarn buildTemplateNative && cross-env OUTPUT_DIR=app yarn build:externals && yarn getSecrets && node --max-old-space-size=8192 ../../../node_modules/webpack/bin/webpack.js --config=config/webpack.app.config.js --env=production && node ./scripts/buildWindows.js",
+    "build:mac": "PLATFORM=companion yarn buildTemplateNative; OUTPUT_DIR=app yarn build:externals; STAGE=$STAGE yarn getSecrets && node --max-old-space-size=8192 ../../../node_modules/webpack/bin/webpack.js --config=config/webpack.app.config.js --env=production && node ./scripts/buildMac.js",
+    "build:externals": "echo Skipping...",
+    "deploy": "yarn buildTemplateWeb; STAGE=$STAGE yarn getSecrets && SST_BUILD_CONCURRENCY=1 sst deploy --stage=$STAGE && (STAGE=$STAGE yarn putSecrets || echo 'Secrets')",
+    "destroy": "sst remove --stage=$STAGE",
+    "test": "craco test --passWithNoTests --watchAll=false",
+    "eject": "react-scripts eject",
+    "cordova": "cordova",
+    "generate": "graphql-codegen -o",
+    "buildTemplateNative": "cross-env IS_NATIVE=true node ./scripts/buildIndex",
+    "buildTemplateWeb": "node ./scripts/buildIndex",
+    "copyCordovaPlugins": "ts-node --project tsconfig.scripts.json ./scripts/copyPlugins.ts",
+    "preBuildIOS": "STAGE=$STAGE yarn getSecrets && ts-node --project tsconfig.scripts.json ./scripts/preBuildIOS.ts",
+    "putSecrets": "ts-node --project tsconfig.scripts.json ./scripts/putSecrets.ts",
+    "getSecrets": "ts-node --project tsconfig.scripts.json ./scripts/getSecrets.ts",
+    "waitForStack": "aws cloudformation wait stack-update-complete --stack-name=\"${STAGE}-211-west-react-211-west-stack\" || echo 'Stack failed. Try again...'"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "cordova": {
+    "platforms": [],
+    "plugins": {
+      "cordova-plugin-file": {},
+      "cordova-plugin-background-download": {},
+      "cordova-plugin-screen-orientation": {},
+      "cordova-plugin-statusbar": {}
+    }
+  },
+  "homepage": "./",
+  "displayName": "211West",
+  "author": "Evolution Virtual",
+  "description": "",
+  "build": {
+    "appId": "com.sage.211West",
+    "files": [
+      "app/**/*",
+      "node_modules/**/*",
+      "../../../node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "resources"
+    },
+    "publish": null,
+    "extraMetadata": {
+      "main": "./app/main.js"
+    }
+  },
+  "resolutions": {
+    "@types/react": "17.0.38"
+  },
+  "devDependencies": {
+    "@craco/craco": "^6.4.3",
+    "@types/cordova": "^0.0.34",
+    "@types/electron": "^1.6.10",
+    "@types/jest": "^29.4.1",
+    "@types/koa__cors": "^3.3.0",
+    "@types/koa__router": "^12.0.0",
+    "@types/node-osc": "^6.0.0",
+    "@types/react": "17.0.14",
+    "@types/react-dom": "^17.0.0",
+    "cordova": "^11.0.0",
+    "cordova-ios": "6.3.0",
+    "cordova-plugin-background-download": "^0.0.2",
+    "cordova-plugin-file": "github:apache/cordova-plugin-file",
+    "cordova-plugin-screen-orientation": "^3.0.3",
+    "cordova-plugin-statusbar": "github:apache/cordova-plugin-statusbar",
+    "cross-env": "^7.0.3",
+    "electron": "19.0.0",
+    "electron-builder": "23.0.2",
+    "ts-loader": "9.3.1"
+  }
+}

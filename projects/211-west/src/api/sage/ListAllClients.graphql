@@ -1,0 +1,26 @@
+query ListAllClients($applicationId: String!) {
+  listAllClients(applicationId: $applicationId) {
+    id
+    firstName
+    lastName
+    email
+    agentId
+    applicationId
+    phone
+    company
+    street
+    city
+    country
+    state
+    firstVisit
+    hearAboutUs
+    savedUnits {
+      id
+      userId
+      unitId
+      propertyId
+      componentId
+      applicationId
+    }
+  }
+}

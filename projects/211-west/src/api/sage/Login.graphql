@@ -1,0 +1,16 @@
+mutation LoginWithPin(
+  $applicationId: String!
+  $userId: String!
+  $pin: String!
+) {
+  loginWithPin(applicationId: $applicationId, userId: $userId, pin: $pin) {
+    __typename
+    ... on LoginSuccess {
+      token
+    }
+    ... on LoginError {
+      error
+      message
+    }
+  }
+}

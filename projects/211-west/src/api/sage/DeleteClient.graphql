@@ -1,0 +1,11 @@
+mutation DeleteClient(
+  $id: String!
+  $agentId: String!
+  $applicationId: String!
+) {
+  deleteClient(id: $id, agentId: $agentId, applicationId: $applicationId) {
+    id
+    agentId
+    applicationId
+  }
+}

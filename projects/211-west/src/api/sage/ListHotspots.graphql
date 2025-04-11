@@ -1,0 +1,19 @@
+query ListHotspots($applicationId: String!, $propertyId: String!) {
+  hotspots(applicationId: $applicationId, propertyId: $propertyId) {
+    id
+    name
+    mediaId
+    towerId
+    type
+    map {
+      name
+      category
+      descriptionPopUp
+      tag
+      x
+      y
+      width
+      height
+    }
+  }
+}

@@ -1,0 +1,27 @@
+mutation UpdateClient($id: String!, $input: ClientInput!) {
+  updateClient(id: $id, input: $input) {
+    id
+    firstName
+    lastName
+    email
+    agentId
+    applicationId
+    brokerId
+    phone
+    company
+    street
+    city
+    country
+    state
+    firstVisit
+    hearAboutUs
+    savedUnits {
+      id
+      userId
+      unitId
+      propertyId
+      componentId
+      applicationId
+    }
+  }
+}

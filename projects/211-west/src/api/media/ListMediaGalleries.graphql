@@ -1,0 +1,54 @@
+query ListPropertyGalleries($propertyId: String!) {
+  mediaGalleries(propertyId: $propertyId) {
+    id
+    name
+
+    category {
+      name
+    }
+
+    medias {
+      id
+      title
+      showTitle
+      url
+      thumbnail: url(thumbnail: true)
+      key
+      description
+      tags {
+        name
+      }
+    }
+
+    componentTargets: targets(type: COMPONENT) {
+      id
+      name
+      type
+    }
+    unitTargets: targets(type: UNIT) {
+      id
+      name
+      type
+    }
+    unitModelTargets: targets(type: UNIT_MODEL) {
+      id
+      name
+      type
+    }
+    floorplanTargets: targets(type: FLOOR_PLAN) {
+      id
+      name
+      type
+    }
+    keyplanTargets: targets(type: KEY_PLAN) {
+      id
+      name
+      type
+    }
+    amenityTargets: targets(type: AMENITY) {
+      id
+      name
+      type
+    }
+  }
+}

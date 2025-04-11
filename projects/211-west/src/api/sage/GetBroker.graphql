@@ -1,0 +1,13 @@
+query GetBroker($applicationId: String!, $agentId: String!, $id: String!) {
+  broker(applicationId: $applicationId, agentId: $agentId, id: $id) {
+    id
+    firstName
+    lastName
+    email
+    phone
+    company
+    title
+    agentId
+    applicationId
+  }
+}

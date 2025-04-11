@@ -1,0 +1,21 @@
+query ListViews360($input: ListViews360Input!) {
+  listViews360(input: $input) {
+    id
+    name
+    description
+    mediaId
+    image {
+      thumbnailSrc
+      fullImageSrc
+    }
+    scenes {
+      id
+      name
+      description
+      left
+      top
+      horizontalDegrees
+      verticalDegrees
+    }
+  }
+}

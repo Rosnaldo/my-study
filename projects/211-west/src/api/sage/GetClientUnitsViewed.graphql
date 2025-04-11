@@ -1,0 +1,23 @@
+query GetClientUnitsViewed(
+  $applicationId: String!
+  $agentId: String!
+  $clientId: String!
+) {
+  clientUnitsViewed(
+    applicationId: $applicationId
+    agentId: $agentId
+    clientId: $clientId
+  ) {
+    id
+    applicationId
+    clientId
+    agentId
+    units {
+      id
+      name
+      propertyId
+      componentId
+      totalViews
+    }
+  }
+}

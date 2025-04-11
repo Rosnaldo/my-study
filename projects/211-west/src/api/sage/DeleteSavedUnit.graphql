@@ -1,0 +1,13 @@
+mutation DeleteSavedUnit(
+  $applicationId: String!
+  $input: DeleteSavedUnitInput!
+) {
+  deleteSavedUnit(applicationId: $applicationId, input: $input) {
+    id
+    userId
+    unitId
+    propertyId
+    componentId
+    applicationId
+  }
+}

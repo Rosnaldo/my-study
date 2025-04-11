@@ -1,0 +1,11 @@
+mutation CreateBroker($input: CreateBrokerInput!) {
+  createBroker(input: $input) {
+    id
+    firstName
+    lastName
+    phone
+    company
+    email
+    title
+  }
+}

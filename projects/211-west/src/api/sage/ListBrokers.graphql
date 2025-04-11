@@ -1,0 +1,13 @@
+query ListBrokers($applicationId: String!) {
+  listBrokers(applicationId: $applicationId) {
+    id
+    firstName
+    lastName
+    email
+    phone
+    company
+    title
+    agentId
+    applicationId
+  }
+}

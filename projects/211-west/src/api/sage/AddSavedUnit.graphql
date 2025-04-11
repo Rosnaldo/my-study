@@ -1,0 +1,10 @@
+mutation AddSavedUnit($input: SavedUnitInput!) {
+  savedUnit(input: $input) {
+    id
+    userId
+    unitId
+    propertyId
+    componentId
+    applicationId
+  }
+}

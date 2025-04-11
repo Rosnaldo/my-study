@@ -1,0 +1,9 @@
+query GetAgent($applicationId: String!, $id: String!) {
+  agent(applicationId: $applicationId, id: $id) {
+    id
+    firstName
+    lastName
+    email
+    image
+  }
+}

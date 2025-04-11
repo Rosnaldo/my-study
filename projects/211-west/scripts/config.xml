@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget id="com.sageapp.211West" version="1.0.3" ios-CFBundleVersion="###" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>211West</name>
+    <description>
+        Virtual real estate visualization tool. Browse for condo interior and exterior renderings, exterior views, videos, surrounding areas, unit information, 3D interactive 360s and other tools to present to potential clients.
+    </description>
+    <author email="dt@evolutionv.com" href="http://vysta.io">
+        Evolution Virtual
+    </author>
+    <content src="index.html" />
+    <access origin="*" allows-arbitrary-loads="true" allows-arbitrary-loads-for-media="true" allows-arbitrary-loads-in-web-content="true" allows-local-networking="true" />
+    <access origin="cdvfile://*" allows-arbitrary-loads="true" allows-arbitrary-loads-for-media="true" allows-arbitrary-loads-in-web-content="true" allows-local-networking="true" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="Orientation" value="$SAGE_VAR=orientation$" />
+    <preference name="BackgroundColor" value="$SAGE_VAR=backgroundColor$" />
+    <preference name="AllowInlineMediaPlayback" value="true" />
+    <preference name="InAppBrowserStatusBarStyle" value="$SAGE_VAR=statusBarColor$" />
+    <preference name="UIStatusBarHidden" value="true" />
+    <preference name="UIViewControllerBasedStatusBarAppearance" value="false" />
+    <preference name="target-device" value="tablet" />
+    <allow-navigation href="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="ios">
+        <preference name="scheme" value="app" />
+        <preference name="hostname" value="localhost" />
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+        <edit-config file="*-Info.plist" mode="add" target="ITSAppUsesNonExemptEncryption">
+            <false />
+        </edit-config>
+        <icon src="resources/icons/icon-29.png" width="29" height="29" />
+        <icon src="resources/icons/icon-40.png" width="40" height="40" />
+        <icon src="resources/icons/icon-50.png" width="50" height="50" />
+        <icon src="resources/icons/icon-57.png" width="57" height="57" />
+        <icon src="resources/icons/icon-58.png" width="58" height="58" />
+        <icon src="resources/icons/icon-64.png" width="64" height="64" />
+        <icon src="resources/icons/icon-72.png" width="72" height="72" />
+        <icon src="resources/icons/icon-76.png" width="76" height="76" />
+        <icon src="resources/icons/icon-80.png" width="80" height="80" />
+        <icon src="resources/icons/icon-87.png" width="87" height="87" />
+        <icon src="resources/icons/icon-100.png" width="100" height="100" />
+        <icon src="resources/icons/icon-114.png" width="114" height="114" />
+        <icon src="resources/icons/icon-120.png" width="120" height="120" />
+        <icon src="resources/icons/icon-128.png" width="128" height="128" />
+        <icon src="resources/icons/icon-144.png" width="144" height="144" />
+        <icon src="resources/icons/icon-152.png" width="152" height="152" />
+        <icon src="resources/icons/icon-167.png" width="167" height="167" />
+        <icon src="resources/icons/icon-180.png" width="180" height="180" />
+        <icon src="resources/icons/icon-256.png" width="256" height="256" />
+        <icon src="resources/icons/icon-512.png" width="512" height="512" />
+        <icon src="resources/icons/icon-1024.png" width="1024" height="1024" />
+    </platform>
+    <hook type="before_prepare" src="scripts/prebuild.js" />
+    <preference name="EnableViewportScale" value="true" />
+    <preference name="InspectableWebView" value="true" />
+</widget>

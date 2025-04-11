@@ -1,0 +1,26 @@
+overwrite: true
+generates:
+  ./src/api/__generated__/sage.ts:
+    documents: 'src/api/sage/*.graphql'
+    schema:
+      - ../sageApiService/graphql/schema.graphql
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withHOC: false
+      withHooks: true
+      withComponent: false
+  ./src/api/__generated__/media.ts:
+    documents: 'src/api/media/*.graphql'
+    schema:
+      - ../../platform/mediaService/graphql/schema.graphql
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withHOC: false
+      withHooks: true
+      withComponent: false

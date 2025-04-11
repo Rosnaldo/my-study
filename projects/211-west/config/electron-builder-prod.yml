@@ -1,0 +1,23 @@
+appId: com.sage.211West
+productName: 211West
+artifactName: '${productName}.${ext}'
+files:
+  - app/**/*
+  - node_modules/**/*
+  - ../../../node_modules/**/*
+  - package.json
+directories:
+  buildResources: resources
+publish:
+  provider: s3
+  bucket: ''
+  endpoint: https://vysta-devops.s3.amazonaws.com/artifacts/production/sage/211-west/windows-prerelease/
+extraMetadata:
+  main: ./app/main.js
+win:
+  target:
+    - target: portable
+mac:
+  target:
+    - target: dmg
+  identity: null

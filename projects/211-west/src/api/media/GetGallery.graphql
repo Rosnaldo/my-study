@@ -1,0 +1,10 @@
+query GetGalleryById($propertyId: String!, $id: String!) {
+  mediaGallery(propertyId: $propertyId, id: $id) {
+    medias {
+      id
+      title
+      showTitle
+      url
+    }
+  }
+}

@@ -1,0 +1,7 @@
+query listAgents($applicationId: String!) {
+  listAgents(applicationId: $applicationId) {
+    id
+    firstName
+    lastName
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "electron": {
+    "windows": {
+      "package": ["nsis"]
+    }
+  },
+  "ios": {
+    "debug": {
+      "codeSignIdentity": "Apple Development",
+      "provisioningProfile": "55ff51b7-a2e6-4279-afd0-df6ab81aed57",
+      "packageType": "development",
+      "developmentTeam": "82FT67V9AV"
+    },
+    "release": {
+      "codeSignIdentity": "Apple Distribution",
+      "provisioningProfile": "4f940bf5-6f53-4b44-a04d-bcddd7fa146e",
+      "packageType": "app-store",
+      "developmentTeam": "82FT67V9AV",
+      "buildFlag": [
+        "EMBEDDED_CONTENT_CONTAINS_SWIFT = YES",
+        "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES=NO",
+        "LD_RUNPATH_SEARCH_PATHS = \"@executable_path/Frameworks\"",
+        "-UseModernBuildSystem=0"
+      ]
+    }
+  }
+}

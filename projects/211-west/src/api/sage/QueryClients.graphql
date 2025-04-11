@@ -1,0 +1,21 @@
+query QueryClients($applicationId: String!, $agentId: String!) {
+  agent(applicationId: $applicationId, id: $agentId) {
+    id
+    clients {
+      id
+      firstName
+      lastName
+      email
+      agentId
+      applicationId
+      phone
+      company
+      street
+      city
+      country
+      state
+      firstVisit
+      hearAboutUs
+    }
+  }
+}
