@@ -1,0 +1,25 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Values.release.name }}-vs
+  namespace: istio-system
+  labels:
+    name: {{ .Values.release.name }}-vs
+    env: {{ .Values.release.env }}
+spec:
+  hosts:
+    - {{ .Values.release.host }}
+  gateways:
+    - {{ .Values.istio.gateway }}
+  http:
+    - match:
+        - uri:
+            prefix: /wp-json
+      rewrite:
+        uri: /wp-json
+      route:
+        - destination:
+            host: blog-coodesh-com.wp-system.svc.cluster.local
+    - route:
+      - destination:
+          host: {{ printf "%s.%s.%s" .Values.release.name .Values.release.namespace "svc.cluster.local" }}

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.release.name }}
+  labels:
+    app: {{ .Values.release.name }}
+    env: {{ .Values.release.env }}
+spec:
+  ports:
+    - name: http
+      port: {{ .Values.release.port }}
+      targetPort: {{ .Values.release.port }}
+  selector:
+    app: {{ .Values.release.name }}
+  type: ClusterIP
+  clusterIP: None

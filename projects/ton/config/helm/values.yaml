@@ -1,0 +1,19 @@
+release:
+  name: coodesh-api-develop
+  namespace: api-system
+  env: development
+  replicaCount: 1
+  host: api.beta.coodesh.com
+  image: gcr.io/cloud-247010/coodesh-api:develop
+  port: 9001
+
+istio:
+  gateway: istio-system/coodesh-com-gateway
+
+redis:
+  host: munin-redis-master.tool-system.svc.cluster.local
+  port: 6379
+
+mongo:
+  host: vor-mongodb.db-system.svc.cluster.local
+  port: 27017

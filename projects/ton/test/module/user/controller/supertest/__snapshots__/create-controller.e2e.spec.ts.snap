@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserCreateController /POST user 1`] = `"{\\"_id\\":\\"5ce1d6bb8fef73750f97e941\\",\\"firstName\\":\\"Andrey\\",\\"lastName\\":\\"Tsuzuki\\",\\"email\\":\\"andreytsuzuzki@gmail.com\\",\\"password\\":\\"encrypted\\",\\"created\\":\\"2021-10-13T19:21:44.908Z\\",\\"updated\\":\\"2021-10-13T19:21:44.908Z\\",\\"__v\\":0}"`;

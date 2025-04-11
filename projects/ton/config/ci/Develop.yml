@@ -1,0 +1,45 @@
+release_develop:
+  extends:
+    - .func_release
+    - .only-cache-pull
+  variables:
+    IMAGE: ${AWS_DEV_CONTAINER_REGISTRY}/$CI_PROJECT_NAME
+    AWS_CLUSTER_NAME: $AWS_DEV_CLUSTER_NAME
+    AWS_ACCESS_KEY_ID: $AWS_DEV_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_DEV_SECRET_ACCESS_KEY
+  only:
+    - develop
+  needs:
+    - build
+
+deploy_develop:
+  stage: deploy
+  image: jshimko/kube-tools-aws:3.5.0
+  variables:
+    SERVER_PORT: 9001
+    NODE_ENV: development
+    REPLICA_COUNT: 1
+    HOST: api.beta.coodesh.com
+    MONGO_SECRET: mongodb-credentials
+    MONGO_DB: coodesh
+    MONGO_REPLICA_SET_STATUS: "on"
+    MONGO_REPLICA_SET_SRV: "on"
+    MONGO_REPLICA_SET_NAME: "atlas-wbxq5i-shard-0"
+    MONGO_REPLICA_SET_HOSTS: coodesh.bzr7r.mongodb.net
+    IMAGE: ${AWS_DEV_CONTAINER_REGISTRY}/$CI_PROJECT_NAME:$CI_COMMIT_SHORT_SHA
+    AWS_CLUSTER_NAME: $AWS_DEV_CLUSTER_NAME
+    AWS_ACCESS_KEY_ID: $AWS_DEV_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_DEV_SECRET_ACCESS_KEY
+  script:
+    - init_aws
+    - run_helm
+  cache: {}
+  dependencies: []
+  only:
+    refs:
+      - develop
+  environment:
+    name: develop
+    url: https://${HOST}
+  needs:
+    - release_develop

@@ -1,0 +1,9 @@
+[
+  {
+    "_id": { "$oid": "5ce5895fc312a6648e06d5f3" },
+    "firstName": "Andrey",
+    "lastName": "Tsuzuki",
+    "email": "andreytsuzuki@gmail.com",
+    "password": "$2b$10$.fszeJjMf7VV2KByddRMJ.XPbmvnWPTyHiZ7QdfX0D/J2EFkCNQta"
+  }
+]

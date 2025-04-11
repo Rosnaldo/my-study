@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.release.name }}
+  labels:
+    app: {{ .Values.release.name }}
+    env: {{ .Values.release.env }}
+spec:
+  replicas: {{ .Values.release.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.release.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.release.name }}
+    spec:
+      containers:
+        - image: {{ .Values.release.image }}
+          imagePullPolicy: Always
+          name: {{ .Values.release.name }}
+          ports:
+            - containerPort: {{ .Values.release.port }}
+          resources:
+            requests:
+              cpu: 2m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 750Mi
+          env:
+            - name: NODE_ENV
+              value: {{ .Values.release.env }}
+            - name: SERVER_PORT
+              value: {{ .Values.release.port | quote }}
+            {{- if .Values.release.prefix }}
+            - name: PREFIX
+              value: {{ .Values.release.prefix | quote }}
+            {{- end }}
+            {{- if .Values.mongo.replicaSetStatus }}
+            - name: MONGO_REPLICA_SET_STATUS
+              value: {{ .Values.mongo.replicaSetStatus | quote }}
+            {{- end }}
+            {{- if .Values.mongo.replicaSetSrv }}
+            - name: MONGO_REPLICA_SET_SRV
+              value: {{ .Values.mongo.replicaSetSrv | quote }}
+            {{- end}}
+            {{- if .Values.mongo.replicaSetName }}
+            - name: MONGO_REPLICA_SET_NAME
+              value: {{ .Values.mongo.replicaSetName | quote }}
+            {{- end}}
+            {{- if .Values.mongo.replicaSetHosts }}
+            - name: MONGO_REPLICA_SET_HOSTS
+              value: {{ .Values.mongo.replicaSetHosts | quote }}
+            {{- end}}
+            {{- if .Values.mongo.host }}
+            - name: MONGO_HOST
+              value: {{ .Values.mongo.host | quote }}
+            {{- end}}
+            {{- if .Values.mongo.db }}
+            - name: MONGO_DB
+              value: {{ .Values.mongo.db | quote }}
+            {{- end}}
+            - name: MONGO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mongo.secret | quote }}
+                  key: username
+            - name: MONGO_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mongo.secret | quote }}
+                  key: password
+            {{- if .Values.redis.host }}
+            - name: REDIS_HOST
+              value: {{ .Values.redis.host | quote }}
+            {{- end}}
+            {{- if .Values.redis.port }}
+            - name: REDIS_PORT
+              value: {{ .Values.redis.port | quote }}
+            {{- end}}

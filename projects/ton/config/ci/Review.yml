@@ -1,0 +1,147 @@
+.only-review:
+  only:
+    refs:
+      - merge_requests
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == 'develop'
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_TITLE =~ /^Draft.*/
+
+install_review:
+  stage: install
+  when: manual
+  variables:
+    MONGOMS_DOWNLOAD_URL: 'https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-4.2.8.tgz'
+    MONGOMS_VERSION: '4.2.8'
+  script:
+    - init_deps
+    - init_ssh
+    - npm install
+  extends:
+    - .only-review
+    - .only-cache
+  interruptible: true
+
+coverage_review:
+  stage: test
+  image: node:10.15
+  script:
+    - npm run coverage
+  artifacts:
+    when: always
+    reports:
+      cobertura: coverage/cobertura-coverage.xml
+    paths:
+      - coverage
+  interruptible: true
+  allow_failure: true
+  extends:
+    - .only-review
+    - .only-cache-pull
+    - .only-run-changes
+  needs:
+    - install_review
+
+test_review:
+  stage: test
+  retry: 2
+  image: node:10.15
+  script:
+    - CI=true npm run test
+  artifacts:
+    when: always
+    paths:
+      - coverage
+    reports:
+      junit:
+        - coverage/junit.xml
+  extends:
+    - .only-review
+    - .only-cache-pull
+    - .only-run-changes
+
+build_review:
+  stage: build
+  script:
+    - init_deps
+    - init_ssh
+    - npm run build
+  extends:
+    - .only-artifacts
+    - .only-review
+    - .only-cache
+  needs:
+    - install_review
+  interruptible: true
+
+release_review:
+  extends:
+    - .func_release
+    - .only-review
+    - .only-cache-pull
+  variables:
+    IMAGE: ${AWS_DEV_CONTAINER_REGISTRY}/$CI_PROJECT_NAME-review
+    AWS_CLUSTER_NAME: $AWS_DEV_CLUSTER_NAME
+    AWS_ACCESS_KEY_ID: $AWS_DEV_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_DEV_SECRET_ACCESS_KEY
+  needs:
+    - build_review
+
+
+deploy_review:
+  stage: deploy
+  image: jshimko/kube-tools-aws:3.5.0
+  extends:
+    - .only-cache-pull
+    - .only-review
+  variables:
+    SERVER_PORT: 9002
+    NODE_ENV: development
+    REPLICA_COUNT: 1
+    HOST: api-${CI_COMMIT_REF_SLUG}.review.coodesh.com
+    MONGO_SECRET: mongodb-credentials
+    MONGO_DB: coodesh
+    MONGO_REPLICA_SET_STATUS: "on"
+    MONGO_REPLICA_SET_SRV: "on"
+    MONGO_REPLICA_SET_NAME: "atlas-wbxq5i-shard-0"
+    MONGO_REPLICA_SET_HOSTS: coodesh.bzr7r.mongodb.net
+    PROJECT_NAME: api-coodesh-com-${CI_MERGE_REQUEST_IID}
+    IMAGE: ${AWS_DEV_CONTAINER_REGISTRY}/$CI_PROJECT_NAME-review:$CI_COMMIT_SHORT_SHA
+    AWS_CLUSTER_NAME: $AWS_DEV_CLUSTER_NAME
+    AWS_ACCESS_KEY_ID: $AWS_DEV_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_DEV_SECRET_ACCESS_KEY
+  script:
+    - init_aws
+    - run_helm
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: https://api-${CI_COMMIT_REF_SLUG}.review.coodesh.com
+    on_stop: stop_review
+    auto_stop_in: 1 week
+  needs:
+    - release_review
+
+stop_review:
+  stage: cleanup
+  image: jshimko/kube-tools-aws:3.5.0
+  cache: {}
+  script:
+    - init_aws
+    - helm del ${PROJECT_NAME} -n ${NAMESPACE}
+  variables:
+    GIT_STRATEGY: none
+    PROJECT_NAME: api-coodesh-com-${CI_MERGE_REQUEST_IID}
+    HOST: ${CI_COMMIT_REF_SLUG}.review.coodesh.com
+    AWS_CLUSTER_NAME: $AWS_DEV_CLUSTER_NAME
+    AWS_ACCESS_KEY_ID: $AWS_DEV_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY: $AWS_DEV_SECRET_ACCESS_KEY
+  when: manual
+  extends:
+    - .only-review
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+    url: https://${CI_COMMIT_REF_SLUG}.review.coodesh.com
+  needs:
+    - deploy_review
