@@ -1,0 +1,1 @@
+module.exports = add = (num ,num2) => num + num2

@@ -1,0 +1,27 @@
+{
+  "name": "http-stream-file",
+  "version": "1.0.0",
+  "description": "Starter code for streaming a file to Express http response",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "heynode",
+    "streams"
+  ],
+  "author": "Jon Church <jon@osiolabs.com>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonchurch/http-stream-file.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jonchurch/http-stream-file/issues"
+  },
+  "homepage": "https://github.com/jonchurch/http-stream-file#readme"
+}

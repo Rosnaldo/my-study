@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "async": "^3.2.4",
+    "concat-stream": "^2.0.0",
+    "fastseries": "^2.0.0"
+  }
+}

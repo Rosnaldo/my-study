@@ -1,0 +1,27 @@
+name: sample
+version: 0.1.0
+
+authors:
+  - Andrey Kenji Tsuzuki <andreytsuzuki@gmail.com>
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+  dotenv:
+    github: gdotdesign/cr-dotenv
+  pg:
+    github: will/crystal-pg
+  jennifer:
+    github: imdrasil/jennifer.cr
+    version: "~> 0.13.0"
+  sam:
+    github: imdrasil/sam.cr
+    version: 0.4.2
+
+targets:
+  sample:
+    main: src/main.cr
+
+crystal: 1.5.0
+
+license: MIT

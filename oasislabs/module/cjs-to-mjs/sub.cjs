@@ -1,0 +1,1 @@
+module.exports = sub = (num, num2) => num - num2

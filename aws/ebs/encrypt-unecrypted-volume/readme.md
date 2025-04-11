@@ -1,0 +1,4 @@
+- create snapshot from ebs volume
+- create a volume from snapshot
+  - check encrypt
+- remove unecrypted ebs and snapshot

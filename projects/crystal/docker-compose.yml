@@ -1,0 +1,49 @@
+version: '3.7'
+services:
+  backend:
+    image: challenge
+    container_name: challenge
+    build: .
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migration:
+        condition: service_started
+    restart: on-failure
+    ports:
+      - 3000:3000
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    hostname: postgres
+    volumes:
+      - volume-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: database
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U root']
+      interval: 60s
+    ports:
+      - 5432:5432
+
+  migration:
+    container_name: migration
+    image: migration
+    build:
+      context: .
+    command:
+      [
+        'make',
+        'sam',
+        'db:migrate',
+      ]
+    depends_on:
+      - postgres
+
+volumes:
+  volume-data:

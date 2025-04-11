@@ -1,0 +1,1 @@
+node -p "crypto.randomBytes(100).toString('hex')" | node index.js

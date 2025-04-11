@@ -1,0 +1,9 @@
+default: &default
+  host: postgres
+  user: user
+  password: password
+  adapter: postgres
+
+development:
+  <<: *default
+  db: database

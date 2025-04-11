@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "debug": "node --inspect index.js",
+    "debug-brk": "node --inspect-brk index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
