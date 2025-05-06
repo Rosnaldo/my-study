@@ -1,27 +1,42 @@
-##### Stage 1: Builder Stage #####
-FROM node:bookworm AS builder
+FROM node:17.9.0 AS base
 
-# Set Working Directory
-WORKDIR /app
+WORKDIR /usr/src/app
 
-# Install dependencies
 COPY package*.json ./
-RUN npm install --production
+    
+RUN npm install
 
-# Copy the application source code
-COPY *.js .
+COPY . .
 
-##### Stage 2: Final Stage ##### 
-FROM node:bookworm-slim AS final  
+# for lint
 
-# Set Working Directory
-WORKDIR /app
+FROM base as linter
 
-# Copy the necessary files from the builder stage
-COPY --from=builder /app ./
+WORKDIR /usr/src/app
 
-# Expose the application port
-EXPOSE 8080
+RUN npm run lint
 
-# Start the application
-CMD ["npm", "start"]
+# for build
+
+FROM linter as builder
+
+WORKDIR /usr/src/app
+
+RUN npm run build
+
+
+# for production
+
+FROM node:17.9.0-alpine3.15
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm install --only=production
+
+COPY --from=builder /usr/src/app/dist ./
+
+EXPOSE 3000
+
+ENTRYPOINT ["node","./app.js"]
