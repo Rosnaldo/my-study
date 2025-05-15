@@ -1,0 +1,43 @@
+ + output_v3_1     = {
+      + us-east-1a = [
+          + "t3.micro",
+        ]
+      + us-east-1b = [
+          + "t3.micro",
+        ]
+      + us-east-1c = [
+          + "t3.micro",
+        ]
+      + us-east-1d = [
+          + "t3.micro",
+        ]
+      + us-east-1e = []
+      + us-east-1f = [
+          + "t3.micro",
+        ]
+    }
+  + output_v3_2     = {
+      + us-east-1a = [
+          + "t3.micro",
+        ]
+      + us-east-1b = [
+          + "t3.micro",
+        ]
+      + us-east-1c = [
+          + "t3.micro",
+        ]
+      + us-east-1d = [
+          + "t3.micro",
+        ]
+      + us-east-1f = [
+          + "t3.micro",
+        ]
+    }
+  + output_v3_3     = [
+      + "us-east-1a",
+      + "us-east-1b",
+      + "us-east-1c",
+      + "us-east-1d",
+      + "us-east-1f",
+    ]
+  + output_v3_4     = "us-east-1a"
