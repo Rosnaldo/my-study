@@ -1,0 +1,8 @@
+regions:
+  - "us-east-1"
+
+blocklist:
+  - "073825269324"
+
+accounts:
+  "253490794521": {}

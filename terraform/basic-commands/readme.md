@@ -16,3 +16,14 @@ terraform apply
 
 terraform destroy
 # destroy all created infrastructure
+
+
+## terraform state
+terraform state list
+#Lista todos os recursos gerenciados
+terraform state show <resource>
+#Mostra os detalhes de um recurso específico
+terraform state rm <resource>
+#Remove um recurso do state sem deletar ele na nuvem
+terraform state mr
+# Move um recurso no state (útil ao renomear recursos)
