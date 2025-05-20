@@ -5,10 +5,7 @@
 aws eks --region <region_code> update-kubeconfig --name <cluster_name>
 
 # list worker nodes
-kubectl get nodes
-
-# verify services
-kubectl get svc
+kubectl get nodes -o wide
 
 
 #### try to access public and private ec2 via ssh ####
