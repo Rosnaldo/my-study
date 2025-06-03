@@ -1,0 +1,9 @@
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  tolerations:
+  - key: "spray"
+    operator: "Equal"
+    value: "mortein"
+    effect: "NoSchedule"
