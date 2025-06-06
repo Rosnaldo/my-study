@@ -9,6 +9,8 @@
 [Affinity and Label](#affinity-and-label)  
 [InitContainer](#initcontainer)  
 [Readiness and Liveness Probe](#readiness-and-liveness-probe)  
+[Job](#job)  
+[Cronjob](#cronjob)  
 <br />
 
 ```bash
@@ -17,6 +19,8 @@ kubernetes version runing inside the node
 
 # list all resources from namespace
 kubectl get all --namespace=[namespace]
+
+kubectl get [resource] --selector [label]
 
 kubectl [command] [resource] [resource_name]
 # commands: create, delete, edit, describe
@@ -41,6 +45,9 @@ kubectl edit pod [pod]
 # get all logs from container inside the pod
 kubectl logs [pod] -c [container] 
 
+# get nodes cpu and memory consumption  
+kubectl top node  
+
 ```
 <br />
 
@@ -49,11 +56,34 @@ kubectl logs [pod] -c [container]
 kubectl create deploy httpd-frontend --image=httpd:2.4-alpine --replicas=3
 kubectl set deploy [deployment] [image]
 
+# scale
+kubectl scale deploy --replicas=<num> <deploy>
 
 # rollout
 kubectl rollout status [deployment]
 kubectl rollout history [deployment]
+kubectl rollout undo deployment [deployment]
 ```
+
+```yaml
+spec:
+  - strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+```
+
+```yaml
+spec:
+  - strategy:
+    type: Recreate
+```
+
+<br />
+
+<img src="rollingUpdate-and-recreate.png" height="100%">  
+
 <br />
 
 ## Service
@@ -64,6 +94,11 @@ minikube service [service] --url
 <br />
 
 ## Replicaset
+
+<img src="replicaset-yaml.png" height="400">  
+<br />
+**Obs: matchLabels connect replicaset to the pod**
+
 ```bash
 # replace replicaset // it wont automatically replace the existing pods
 kubectl replace -f replicaset.yaml
@@ -195,3 +230,23 @@ kubectl label nodes [node] [label]=[value]
 • Use a short `periodSeconds` if you want quick detection of health/readiness issues.  
 
 **Obs:** By setting `periodSeconds`, Kubernetes repeatedly checks the app's health — not just once. If it fails for a certain number of times (set by `failureThreshold`), the container is automatically restarted.
+
+## Job
+[(see example)](job.yaml)
+`completions`: number of required completed jobs.  
+`paralelism`: number of jobs to run at the same time.  
+
+<br />
+
+**obs:** jobs gets created sequentially by default until hit the total completion number unless parallel number is setted up.
+
+```bash
+kubectl logs [job]
+```
+<br />
+
+## Cronjob
+[(see example)](cronjob.yaml)
+
+`Schedule`:  
+<img src="cronjob-schedule.png" width="50%">
