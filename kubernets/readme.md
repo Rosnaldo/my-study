@@ -11,6 +11,7 @@
 [Readiness and Liveness Probe](#readiness-and-liveness-probe)  
 [Job](#job)  
 [Cronjob](#cronjob)  
+[Network Policy](#network-policy)  
 <br />
 
 ```bash
@@ -21,6 +22,9 @@ kubernetes version runing inside the node
 kubectl get all --namespace=[namespace]
 
 kubectl get [resource] --selector [label]
+kubectl get [resource] --all-namespaces
+# -A --all-namespaces
+# -n [namespace] specific namespace
 
 kubectl [command] [resource] [resource_name]
 # commands: create, delete, edit, describe
@@ -47,6 +51,9 @@ kubectl logs [pod] -c [container]
 
 # get nodes cpu and memory consumption  
 kubectl top node  
+
+# add service to ingress path
+kubectl create ingress [ingress] -n [namespace] --rule="/[path]=[service]:[port]"
 
 ```
 <br />
@@ -91,12 +98,14 @@ spec:
 # display service url
 minikube service [service] --url
 ```
+
+**Obs:** Service and Deploy are linked by selector  
 <br />
 
 ## Replicaset
 
-<img src="replicaset-yaml.png" height="400">  
-<br />
+<img src="replicaset-yaml.png" height="400">   
+<br /><br />
 **Obs: matchLabels connect replicaset to the pod**
 
 ```bash
@@ -250,3 +259,33 @@ kubectl logs [job]
 
 `Schedule`:  
 <img src="cronjob-schedule.png" width="50%">
+
+<br />
+
+## Network Policy
+`ingress`: who can talk to the pod  
+`egress`: who the pod can talk to  
+
+<div style="display: flex; gap: 20px">
+<img src="network-policy.png" width="30%">  
+<p>
+Attach to pods with role "db", allow traffic comming from pods with the label api-pod.
+Allow pod to communicate to "192.168.5.10/32".
+</p>
+</div>
+<br /><br />
+<div style="display: flex; gap: 20px">
+<img src="network-policy2.png" width="30%">  
+<p>
+Attach to pods with role "db", allow traffic comming from pods with the label api-pod within namespace prod.
+</p>
+<br /><br />
+</div>
+<br />
+
+### example:
+
+<img src="network-policy-example.png" width="30%">  
+
+[(see internal-network-policy.yaml)](internal-network-policy.yaml)  
+[(see payroll-network-policy.yaml)](payroll-network-policy.yaml)  
