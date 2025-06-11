@@ -289,3 +289,29 @@ Attach to pods with role "db", allow traffic comming from pods with the label ap
 
 [(see internal-network-policy.yaml)](internal-network-policy.yaml)  
 [(see payroll-network-policy.yaml)](payroll-network-policy.yaml)  
+<br />
+
+## Volume
+[(see volume.yaml)](volume.yaml)  
+
+`volumeMounts.mountPath`: mount path inside the container  
+`volumes.path`: path on the node file system  
+
+[(see persistent-volume.yaml)](persistent-volume.yaml)  
+
+
+### Volume types
+`emptyDir`: Created when a Pod is assigned to a Node. Is deleted when the pod gets deleted.  
+`hostPath`: These persist outside the Pod lifecycle.
+
+
+### Persistent volume claim  
+
+[(see persistent-volume-claim.yaml)](persistent-volume-claim.yaml)  
+[(see pod-claim-volume.yaml)](pod-claim-volume.yaml)  
+[(see storage-class.yaml)](storage-class.yaml)  
+
+attach pod to the pvc to claim the volume available.
+attach storageClass to pvc to create the aws resource automatically. 
+
+<br />
