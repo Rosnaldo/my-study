@@ -12,6 +12,7 @@
 [Job](#job)  
 [Cronjob](#cronjob)  
 [Network Policy](#network-policy)  
+[Statefulset](#statefulset) 
 <br />
 
 ```bash
@@ -21,10 +22,17 @@ kubernetes version runing inside the node
 # list all resources from namespace
 kubectl get all --namespace=[namespace]
 
+# list all namespaces
+kubectl get ns
+
 kubectl get [resource] --selector [label]
 kubectl get [resource] --all-namespaces
 # -A --all-namespaces
 # -n [namespace] specific namespace
+
+
+# current pod status status
+kubectl -n default get pod [pod] -o jsonpath="{.status.phase}"
 
 kubectl [command] [resource] [resource_name]
 # commands: create, delete, edit, describe
@@ -69,6 +77,11 @@ kubectl scale deploy --replicas=<num> <deploy>
 # rollout
 kubectl rollout status [deployment]
 kubectl rollout history [deployment]
+
+# See the pod template spec used in that revision
+# but not the pod execution result (status/errors).
+kubectl rollout history [deployment] --revision="n"
+
 kubectl rollout undo deployment [deployment]
 ```
 
@@ -101,6 +114,11 @@ minikube service [service] --url
 
 **Obs:** Service and Deploy are linked by selector  
 <br />
+
+<img src="service-expose.png" height="30%">   
+
+Here the external client will call the **nodeport 30080** which has been exposed to the external client.  
+This request will then be forwarded to service **port 80** on which the kubernetes service is deployed and then finally to **target port 8080** which is the port on which the pod application is running.
 
 ## Replicaset
 
@@ -315,3 +333,24 @@ attach pod to the pvc to claim the volume available.
 attach storageClass to pvc to create the aws resource automatically. 
 
 <br />
+
+
+## Statefulset  
+
+<img src="statefulset.png" width="70%">  
+
+### Volume Claim Template
+
+Each pod will have a different storage
+
+<img src="volume-claim-template.png" width="50%">  
+
+## Roles  
+
+<img src="roles.png" width="70%">  
+
+```bash
+# check if user have permission to execute given command
+# --as [user] // check user
+kubectl auth can-i [command] [resource]
+```
