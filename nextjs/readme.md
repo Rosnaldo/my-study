@@ -60,8 +60,13 @@ Form will work even if the user isn't running JS in their browser.
 <img src="nextjs-auth-with-github.png" height="600">
 
 
-## Nextjs session
+## Nextjs Session
 
 <img src="session/server-component.png" height="70%">
 
 <img src="session/client-component.png" height="70%">
+
+## Nextjs Image tutorial
+
+https://www.youtube.com/watch?app=desktop&v=ZKG8JBdgSos
+https://github.com/zachgoll/nextjs-image-tutorial/tree/main
