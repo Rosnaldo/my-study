@@ -1,0 +1,12 @@
+spec:
+  containers:
+  - name: app
+    image: busybox
+    volumeMounts:
+    - name: config-volume
+      mountPath: /etc/config
+      readOnly: true
+  volumes:
+  - name: config-volume
+    configMap:
+      name: my-config

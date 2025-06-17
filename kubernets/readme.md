@@ -12,12 +12,21 @@
 [Job](#job)  
 [Cronjob](#cronjob)  
 [Network Policy](#network-policy)  
+[Volume](#volume)  
+[ConfigMap](#config-map) 
+[Secret](#secret) 
 [Statefulset](#statefulset) 
 <br />
 
 ```bash
 # kubectl version
 kubernetes version runing inside the node
+
+# list all resources
+kubectl get resources
+
+# explain fields and structures
+kubectl explain [resource]
 
 # list all resources from namespace
 kubectl get all --namespace=[namespace]
@@ -39,8 +48,7 @@ kubectl [command] [resource] [resource_name]
 # resources: pod, node, deploy, service, replicaset
 
 # create a new pod yaml file
-kubectl run redis --image=redis --dry-run -o yaml > redis.yaml
-kubectl create deploy --image=nginx --dry-run -o yaml > deploy.yaml
+kubectl run [pod_name] --image=(image) --dry-run -o yaml > redis.yaml
 # --dry-run // not to run
 # -o yaml // display in a yaml file
 
@@ -66,13 +74,23 @@ kubectl create ingress [ingress] -n [namespace] --rule="/[path]=[service]:[port]
 ```
 <br />
 
+## Container
+
+```bash
+# create a temporary pod to run command
+# curl http://[service].[nameserver]:[port]
+kubectl run [pod] --rm --restart=Never --image=(image) -i -- [command] 
+```
+
 ## Deployment
 ```bash
+kubectl create deploy [deploy] --image=(image)
+
 kubectl create deploy httpd-frontend --image=httpd:2.4-alpine --replicas=3
 kubectl set deploy [deployment] [image]
 
 # scale
-kubectl scale deploy --replicas=<num> <deploy>
+kubectl scale deploy --replicas=(num) [deploy]
 
 # rollout
 kubectl rollout status [deployment]
@@ -80,7 +98,7 @@ kubectl rollout history [deployment]
 
 # See the pod template spec used in that revision
 # but not the pod execution result (status/errors).
-kubectl rollout history [deployment] --revision="n"
+kubectl rollout history [deployment] --revision=(number)
 
 kubectl rollout undo deployment [deployment]
 ```
@@ -335,6 +353,46 @@ attach storageClass to pvc to create the aws resource automatically.
 <br />
 
 
+## ConfigMap
+```bash
+k create -f configmap.yaml
+k -n [namespace] create configmap [configmap] generic --from-literal [key]=[value] --from-literal [key]=[value]
+```
+[(see configmap.yaml)](configmap.yaml)  
+
+### Use configmap as enviroment variable
+[(see pod-env-use-configmap.yaml)](pod-env-use-configmap.yaml)  
+
+### Use configmap as mounted volume
+Each key in the Configmap becomes a file in a directory.  
+[(see pod-volume-use-configmap.yaml)](pod-volume-use-configmap.yaml)  
+
+### Configmap from a file
+```bash
+kubectl create configmap [configmap_name] --from-file=(key)=(file)
+```
+Create a  file at `/etc/config/config-path` inside de container  
+[(see pod-volume-use-configmap-from-file.yaml)](pod-volume-use-configmap-from-file.yaml) 
+
+<br />
+
+## Secret
+```bash
+k create -f secret.yaml
+k -n [namespace] create secret [secret] generic --from-literal [key]=[value] --from-literal [key]=[value]
+```
+[(see secret.yaml)](secret.yaml)  
+
+### Use secret as enviroment variable
+[(see pod-env-use-secret.yaml)](pod-env-use-secret.yaml)  
+
+
+### Use secret as mounted volume
+Each key in the Secret becomes a file in a directory.  
+[(see pod-volume-use-secret.yaml)](pod-volume-use-secret.yaml)  
+
+<br />
+
 ## Statefulset  
 
 <img src="statefulset.png" width="70%">  
@@ -345,9 +403,15 @@ Each pod will have a different storage
 
 <img src="volume-claim-template.png" width="50%">  
 
+<br />
+
 ## Roles  
 
 <img src="roles.png" width="70%">  
+
+`resourceNames`: array containing the access for resources by name.  
+
+**Obs:** The role only allow access within the namespace.  
 
 ```bash
 # check if user have permission to execute given command

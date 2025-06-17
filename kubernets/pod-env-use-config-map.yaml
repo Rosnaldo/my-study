@@ -1,0 +1,7 @@
+spec:
+  containers:
+  - name: app
+    image: busybox
+    envFrom:
+    - configMapRef:
+        name: my-config
