@@ -1,6 +1,7 @@
 # kubernetes
 
 [Deployment](#deployment)  
+[Label](#label)  
 [Service](#service)  
 [Replicate](#replicaset)  
 [Inside Container](#inside-container)  
@@ -9,6 +10,7 @@
 [Affinity and Label](#affinity-and-label)  
 [InitContainer](#initcontainer)  
 [Readiness and Liveness Probe](#readiness-and-liveness-probe)  
+[ServiceAccount](#service-account)  
 [Job](#job)  
 [Cronjob](#cronjob)  
 [Network Policy](#network-policy)  
@@ -124,6 +126,24 @@ spec:
 
 <br />
 
+## Label
+
+```bash
+# add label protected=true to all pods labeld type=worker
+k label pod -l type=worker protected=true
+
+# same for annotate
+k annotate pod -l type=worker protected=true
+
+# list pods with all labels
+k get pods --show-labels
+
+# get pods with selected label
+k get pods -l protected=true
+```
+
+<br />
+
 ## Service
 ```bash
 # display service url
@@ -133,10 +153,28 @@ minikube service [service] --url
 **Obs:** Service and Deploy are linked by selector  
 <br />
 
-<img src="service-expose.png" height="30%">   
+<img src="service-expose.png" height="30%">  
 
 Here the external client will call the **nodeport 30080** which has been exposed to the external client.  
-This request will then be forwarded to service **port 80** on which the kubernetes service is deployed and then finally to **target port 8080** which is the port on which the pod application is running.
+This request will then be forwarded to service **port 80** on which the kubernetes service is deployed and then finally to **target port 8080** which is the port on which the pod application is running.  
+
+### expose
+
+```bash
+kubectl expose pod [pod] --port=80 --target-port=8080
+
+# test exposed service
+curl http://my-service.default.svc.cluster.local:8080
+
+# or 
+kubectl -n [namespace] run [pod] --restart=Never --rm -i --image=[image] -- curl -m 3 [service_name]:[port]
+
+# service expose nodePort to all nodes regardless of which node a pod is running on.
+# should work inside the cluster
+curl [any_node_ip]:[nodePort] 
+```
+
+<br />
 
 ## Replicaset
 
@@ -276,6 +314,14 @@ kubectl label nodes [node] [label]=[value]
 
 **Obs:** By setting `periodSeconds`, Kubernetes repeatedly checks the app's health — not just once. If it fails for a certain number of times (set by `failureThreshold`), the container is automatically restarted.
 
+<br />
+
+## ServiceAccount
+
+**Obs**: You can not update a pod service account, yo must recreate a pod to update.  
+
+<img src="service-account.png" width="30%">
+
 ## Job
 [(see example)](job.yaml)
 `completions`: number of required completed jobs.  
@@ -306,7 +352,18 @@ kubectl logs [job]
 <img src="network-policy.png" width="30%">  
 <p>
 Attach to pods with role "db", allow traffic comming from pods with the label api-pod.
-Allow pod to communicate to "192.168.5.10/32".
+Allow pod to communicate to "192.168.5.10/32".  
+
+
+### test connections
+```bash
+# ingress connection to the pod
+k run db --restart=Never --rm -i --image=busybox -- wget -O [pod_id]:[port]
+
+# egress connection from pod to internet
+k exec [pod] -- wget -O www.google.com
+```
+
 </p>
 </div>
 <br /><br />
@@ -357,7 +414,14 @@ attach storageClass to pvc to create the aws resource automatically.
 ```bash
 k create -f configmap.yaml
 k -n [namespace] create configmap [configmap] generic --from-literal [key]=[value] --from-literal [key]=[value]
+
+# print envs from pod
+k exec [pod] -it -- env
 ```
+
+`--from-file`: filename becomes the key, file content becomes the value.  
+`--from-env-file`: keys and values taken from inside the file.  
+
 [(see configmap.yaml)](configmap.yaml)  
 
 ### Use configmap as enviroment variable
