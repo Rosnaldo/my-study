@@ -1,6 +1,7 @@
 # kubernetes
 
 [Deployment](#deployment)  
+[Cmd and Args](#cmd-and-args)  
 [Label](#label)  
 [Service](#service)  
 [Replicate](#replicaset)  
@@ -84,6 +85,8 @@ kubectl create ingress [ingress] -n [namespace] --rule="/[path]=[service]:[port]
 kubectl run [pod] --rm --restart=Never --image=(image) -i -- [command] 
 ```
 
+<br />
+
 ## Deployment
 ```bash
 kubectl create deploy [deploy] --image=(image)
@@ -123,6 +126,14 @@ spec:
 <br />
 
 <img src="rollingUpdate-and-recreate.png" height="100%">  
+
+<br />
+
+## Cmd and Args
+
+**Obs:** command overwrites the entrypoint from docker image and args overwrites cmd.
+
+<img src="cmd-and-args.png" width="50%">  
 
 <br />
 
@@ -201,6 +212,9 @@ kubectl edit replicaset [replicaset]
 kubectl exec [pod] -- whoami
 
 kubectl exec -it [pod] -c [container] -- [command]
+
+# enter container terminal
+kubectl exec -it [pod] -- /bin/sh
 ```
 <br />
 
@@ -322,12 +336,13 @@ kubectl label nodes [node] [label]=[value]
 
 <img src="service-account.png" width="30%">
 
+<br />
+
 ## Job
-[(see example)](job.yaml)
+
+[(see example)](job.yaml)  
 `completions`: number of required completed jobs.  
 `paralelism`: number of jobs to run at the same time.  
-
-<br />
 
 **obs:** jobs gets created sequentially by default until hit the total completion number unless parallel number is setted up.
 
@@ -353,6 +368,16 @@ kubectl logs [job]
 <p>
 Attach to pods with role "db", allow traffic comming from pods with the label api-pod.
 Allow pod to communicate to "192.168.5.10/32".  
+</p>
+</div>
+<br />
+
+```yaml
+spec:
+  podSelector: {} # this apply to all pods
+```
+
+**Obs:** if one netpol allows a rule and another denies then the rule is allowed.  
 
 
 ### test connections
@@ -362,11 +387,14 @@ k run db --restart=Never --rm -i --image=busybox -- wget -O [pod_id]:[port]
 
 # egress connection from pod to internet
 k exec [pod] -- wget -O www.google.com
+
+# test port on another port
+# a pods name gets resolved when a service clusterip exposes it
+# nc -v (verbose) - z(test port, does not send data) -w(timeout limit)
+k exec [pod] --it -- nc -vz -w 2 [other_pod] [port]
 ```
 
-</p>
-</div>
-<br /><br />
+<br />
 <div style="display: flex; gap: 20px">
 <img src="network-policy2.png" width="30%">  
 <p>
@@ -406,6 +434,11 @@ Attach to pods with role "db", allow traffic comming from pods with the label ap
 
 attach pod to the pvc to claim the volume available.
 attach storageClass to pvc to create the aws resource automatically. 
+
+```bash
+# check mounted volumes
+kubectl exec [pod] -it -- mount 
+```
 
 <br />
 
