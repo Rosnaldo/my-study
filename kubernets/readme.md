@@ -70,6 +70,9 @@ kubectl edit pod [pod]
 # get all logs from container inside the pod
 kubectl logs [pod] -c [container] 
 
+# redirect the WARNINGS to file /opt/logs.txt from controlplane node
+kubectl logs [pod] -c [container] | grep WARNINGS > /opt/logs.txt
+
 # get nodes cpu and memory consumption  
 kubectl top [node | pod]  
 
@@ -180,6 +183,9 @@ This request will then be forwarded to service **port 80** on which the kubernet
 
 ```bash
 kubectl expose pod [pod] --port=80 --target-port=8080
+
+# creates and exposes a service
+kubectl expose deployment [deploy] --port=[port] --name [service_name]
 
 # test exposed service
 curl http://my-service.default.svc.cluster.local:8080
@@ -333,7 +339,9 @@ kubectl create ingress [ingress] -n [namespace] --rule="/[path]=[service]:[port]
 
 ## Route exposed services
 
-<img src="ingress-route-exposed-services.png" width="30%">
+Service exposes on port 8080  
+Can be accessed on url http://watch.ecom-store.com/video  
+[(see example)](ingress-route-exposed-services.yaml)
 
 <br />
 
