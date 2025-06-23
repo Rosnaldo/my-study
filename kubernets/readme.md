@@ -1,7 +1,7 @@
 # kubernetes
 
 [Deployment](#deployment)  
-[Cmd and Args](#cmd-and-args)  
+[Command and Args](#command-and-args)  
 [Label](#label)  
 [Service](#service)  
 [Replicate](#replicaset)  
@@ -10,6 +10,8 @@
 [NodeSelector and Label](#nodeselector-and-label)  
 [Affinity and Label](#affinity-and-label)  
 [InitContainer](#initcontainer)  
+[Ingress](#ingress)  
+[Config](#config)  
 [Readiness and Liveness Probe](#readiness-and-liveness-probe)  
 [ServiceAccount](#service-account)  
 [Job](#job)  
@@ -69,10 +71,7 @@ kubectl edit pod [pod]
 kubectl logs [pod] -c [container] 
 
 # get nodes cpu and memory consumption  
-kubectl top node  
-
-# add service to ingress path
-kubectl create ingress [ingress] -n [namespace] --rule="/[path]=[service]:[port]"
+kubectl top [node | pod]  
 
 ```
 <br />
@@ -98,12 +97,12 @@ kubectl set deploy [deployment] [image]
 kubectl scale deploy --replicas=(num) [deploy]
 
 # rollout
-kubectl rollout status [deployment]
-kubectl rollout history [deployment]
+kubectl rollout status deployment/[deployment]
+kubectl rollout history deployment/[deployment]
 
 # See the pod template spec used in that revision
 # but not the pod execution result (status/errors).
-kubectl rollout history [deployment] --revision=(number)
+kubectl rollout history deployment/[deployment] --revision=(number)
 
 kubectl rollout undo deployment [deployment]
 ```
@@ -129,11 +128,19 @@ spec:
 
 <br />
 
-## Cmd and Args
+## Command and Args
 
-**Obs:** command overwrites the entrypoint from docker image and args overwrites cmd.
+**Obs:** command overwrites the entrypoint from docker image and args overwrites cmd.  
 
-<img src="cmd-and-args.png" width="50%">  
+<img src="command-and-args.png" width="50%">  
+
+<br />
+
+```yaml
+# to use a long command
+command: ["/bin/sh"]
+args: ["-c", "while true; do echo hello; sleep 10;done"]
+```
 
 <br />
 
@@ -311,12 +318,48 @@ kubectl label nodes [node] [label]=[value]
 
 <br />
 
+## Ingress
+
+```bash
+# add service to ingress path
+kubectl create ingress [ingress] -n [namespace] --rule="/[path]=[service]:[port]"
+```
+
+<br />
+
+### Deploy Ingress Controller
+
+<img src="ingress-controller.png" width="70%">
+
+## Route exposed services
+
+<img src="ingress-route-exposed-services.png" width="30%">
+
+<br />
+
+## Config
+
+```bash
+# by default the kubeconfig file is $HOME/.kube/config
+# use to anoter kube config file 
+k get pods --kubeconfig [config_file_path]
+
+# view config file fields
+k config view
+```
+
+<img src="clusters-contexts-users.png" width="70%">
+
+
+<br />
+<br />
+
 ## Readiness and Liveness Probe
 <img src="readiness-probe.png" width="100%">
 
 
-`livenessProbe`: If it fails Kubernetes will restart the container.
-`readinessPobe`: If it fails, the pod is removed from the Service’s load balancer. The container is not restarted, just marked as not ready.
+`livenessProbe`: If it fails Kubernetes will restart the container.  
+`readinessPobe`: If it fails, the pod is removed from the Service’s load balancer. The container is not restarted, just marked as not ready.  
 
 ---
 
@@ -326,7 +369,7 @@ kubectl label nodes [node] [label]=[value]
 • Use a higher `initialDelaySeconds` if your app takes a while to initialize.  
 • Use a short `periodSeconds` if you want quick detection of health/readiness issues.  
 
-**Obs:** By setting `periodSeconds`, Kubernetes repeatedly checks the app's health — not just once. If it fails for a certain number of times (set by `failureThreshold`), the container is automatically restarted.
+**Obs:** By setting `periodSeconds`, Kubernetes repeatedly checks the app's health — not just once. If it fails for a certain number of times (set by `failureThreshold`), the container is automatically restarted.  
 
 <br />
 
@@ -389,9 +432,9 @@ k run db --restart=Never --rm -i --image=busybox -- wget -O [pod_id]:[port]
 k exec [pod] -- wget -O www.google.com
 
 # test port on another port
-# a pods name gets resolved when a service clusterip exposes it
+# a service name gets resolved when it is exposed by clusterip
 # nc -v (verbose) - z(test port, does not send data) -w(timeout limit)
-k exec [pod] --it -- nc -vz -w 2 [other_pod] [port]
+k exec [pod] --it -- nc -vz -w 2 [service] [port]
 ```
 
 <br />
@@ -418,12 +461,14 @@ Attach to pods with role "db", allow traffic comming from pods with the label ap
 `volumeMounts.mountPath`: mount path inside the container  
 `volumes.path`: path on the node file system  
 
+`volumes.emptyDir`: The storage is allocated from node ephemeral storage  
+
 [(see persistent-volume.yaml)](persistent-volume.yaml)  
 
 
 ### Volume types
 `emptyDir`: Created when a Pod is assigned to a Node. Is deleted when the pod gets deleted.  
-`hostPath`: These persist outside the Pod lifecycle.
+`hostPath`: These persist outside the Pod lifecycle.  
 
 
 ### Persistent volume claim  
@@ -432,12 +477,14 @@ Attach to pods with role "db", allow traffic comming from pods with the label ap
 [(see pod-claim-volume.yaml)](pod-claim-volume.yaml)  
 [(see storage-class.yaml)](storage-class.yaml)  
 
-attach pod to the pvc to claim the volume available.
+attach pod to the pvc to claim the volume available.  
 attach storageClass to pvc to create the aws resource automatically. 
 
 ```bash
 # check mounted volumes
-kubectl exec [pod] -it -- mount 
+kubectl exec [pod] -it -- mount
+# or
+kubectl exec [pod] -it -- df -h
 ```
 
 <br />
@@ -515,3 +562,7 @@ Each pod will have a different storage
 # --as [user] // check user
 kubectl auth can-i [command] [resource]
 ```
+
+### Cluster Role for Nodes
+
+<img src="cluster-role.png" width="70%"> 
