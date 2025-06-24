@@ -288,8 +288,8 @@ kubectl label nodes [node] [label]=[value]
 <details>
   <summary> type</summary>
   
-  type1: `preferredDuringSchedulingIgnoredDuringExecution`  
-  type2: `requiredDuringSchedulingIgnoredDuringExecution`  
+  type1: `requiredDuringSchedulingIgnoredDuringExecution`  
+  type2: `preferredDuringSchedulingIgnoredDuringExecution`  
   type3: `requiredDuringSchedulingRequiredDuringExecution`  
 
   <img src="affinity-types-table.png" width="70%">
@@ -467,16 +467,32 @@ Attach to pods with role "db", allow traffic comming from pods with the label ap
 [(see volume.yaml)](volume.yaml)  
 
 `volumeMounts.mountPath`: mount path inside the container  
-`volumes.path`: path on the node file system  
-
-`volumes.emptyDir`: The storage is allocated from node ephemeral storage  
+`volumes.[type].path`: path on the node file system  
 
 [(see persistent-volume.yaml)](persistent-volume.yaml)  
 
 
-### Volume types
-`emptyDir`: Created when a Pod is assigned to a Node. Is deleted when the pod gets deleted.  
-`hostPath`: These persist outside the Pod lifecycle.  
+<details>
+  <summary><strong>Volume types</strong></summary>
+  <code>emptyDir</code>: Created when a Pod is assigned to a Node. Is deleted when the pod gets deleted.  <br />
+  <code>hostPath</code>: These persist outside the Pod lifecycle.  <br />
+  <code>configMap</code>: Mount key-value pairs as files from a ConfigMap.  <br />
+  <code>secret</code>: Mount sensitive data from a Secret as files.  <br />
+  <code>awsElasticBlockStore</code>: AWS EBS volume  <br />
+</details>
+
+<details>
+  <summary><strong>emptyDir vs hostPath</strong></summary>
+
+  | Feature        | `emptyDir`                      | `hostPath`                                |
+  | -------------- | ------------------------------- | ----------------------------------------- |
+  | Backed by      | Node local disk or memory       | Specific path on the node                 |
+  | Lifetime       | Lives during the pod's lifetime | Lives as long as the node                 |
+  | Pod restart    | ✅ Keeps data                    | ✅ Keeps data (if same node)               |
+  | Pod reschedule | ❌ Loses data                    | ❌ Only works if re-scheduled to same node |
+  | Security       | Safe                            | Risky — access to host                    |
+  | Use case       | Temp space, shared cache        | Debugging, accessing host files           |
+</details>
 
 
 ### Persistent volume claim  
@@ -494,6 +510,17 @@ kubectl exec [pod] -it -- mount
 # or
 kubectl exec [pod] -it -- df -h
 ```
+
+<details>
+  <summary><strong>What happens when you delete a PVC?</strong></summary>
+
+  | `persistentVolumeReclaimPolicy` | What happens to PV after PVC deletion?                                                                                  |
+  | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+  | **Delete**                      | The PV **and the underlying storage** are deleted automatically. (Common in cloud-managed storage like AWS EBS, GCE PD) |
+  | **Retain**                      | The PV **remains** but is marked as `Released`. Data remains on disk, manual cleanup is required before reuse.          |
+</details>
+
+
 
 <br />
 
