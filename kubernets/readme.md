@@ -1,6 +1,7 @@
 # kubernetes
 
 [Deployment](#deployment)  
+[Deployment Strategies](#deployment-strategies)  
 [Command and Args](#command-and-args)  
 [Label](#label)  
 [Service](#service)  
@@ -127,9 +128,30 @@ spec:
 
 <br />
 
+## Deployment strategies
+
 <img src="rollingUpdate-and-recreate.png" height="100%">  
 
+### Canary
+
+<img src="canary-service.png" width="50%">  
+
 <br />
+
+<img src="canary-service-yaml.png" width="70%">  
+
+<br />
+
+### Blue Green
+
+<img src="blue-green-service.png" width="50%">  
+
+<br />
+
+<img src="blue-green-service-yaml.png" width="50%">  
+
+<br />
+
 
 ## Command and Args
 
@@ -151,6 +173,7 @@ args: ["-c", "while true; do echo hello; sleep 10;done"]
 
 ```bash
 # add label protected=true to all pods labeld type=worker
+k label pod -l type=worker protected=true
 k label pod -l type=worker protected=true
 
 # same for annotate
