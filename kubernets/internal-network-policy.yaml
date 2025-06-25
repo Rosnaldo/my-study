@@ -8,19 +8,24 @@ spec:
     matchLabels:
       name: internal
   policyTypes:
-    - Egress
+  - Egress
   egress:
-    - to:
-      - podSelector:
-          matchLabels:
-            name: payroll
-      ports:
-       - protocol: TCP
-         port: 8080
-    - to:
-      - podSelector:
-          matchLabels:
-            name: mysql
-      ports:
-        - protocol: TCP
-          port: 3306
+  - to:
+    - podSelector:
+        matchLabels:
+          name: payroll
+    ports:
+    - protocol: TCP
+      port: 8080
+  - to:
+    - podSelector:
+        matchLabels:
+          name: mysql
+    ports:
+    - protocol: TCP
+      port: 3306
+  - ports:
+    - port: 53                # allow DNS UDP
+      protocol: UDP
+    - port: 53                # allow DNS TCP
+      protocol: TCP

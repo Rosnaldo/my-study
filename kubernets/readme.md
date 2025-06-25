@@ -194,13 +194,26 @@ k get pods -l protected=true
 minikube service [service] --url
 ```
 
-**Obs:** Service and Deploy are linked by selector  
+**Obs:** Service and Deploy are linked by selector. It should always select the pod not the deploy.  
 <br />
 
 <img src="service-expose.png" height="30%">  
 
 Here the external client will call the **nodeport 30080** which has been exposed to the external client.  
 This request will then be forwarded to service **port 80** on which the kubernetes service is deployed and then finally to **target port 8080** which is the port on which the pod application is running.  
+
+<br />
+
+| Field        | Meaning                                        |
+| ------------ | ---------------------------------------------- |
+| `port`       | Port exposed by the **Service** (e.g., 80)     |
+| `targetPort` | Port on the **Pod/container** to forward to. It must match the port the container is actually listening to.   |
+| `nodePort`   | (for `NodePort` type) Port exposed on the Node |
+
+
+> A Service can expose a container even without **containerPort**,  
+> as long as the containerized app is actually listening on the **targetPort**.  
+
 
 ### expose
 
@@ -480,10 +493,23 @@ Attach to pods with role "db", allow traffic comming from pods with the label ap
 
 ### example:
 
-<img src="network-policy-example.png" width="30%">  
+<img src="network-policy-example.png" width="70%">  
 
 [(see internal-network-policy.yaml)](internal-network-policy.yaml)  
 [(see payroll-network-policy.yaml)](payroll-network-policy.yaml)  
+
+In this case np is blocking the internal pod from accessing the external pod.  
+The internal pod can access payload and db, also 53 TCP/UDP is allowed.  
+
+**To test:**
+```bash
+# this should hang
+exec internal -it -- wget -O- www.google.com
+
+# this should respond
+exec internal -it -- wget -O- payload:8080
+```
+
 <br />
 
 ## Volume
