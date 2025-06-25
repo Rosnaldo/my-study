@@ -1,5 +1,7 @@
 # kubernetes
 
+[Config](#config)  
+[Container](#container)  
 [Deployment](#deployment)  
 [Deployment Strategies](#deployment-strategies)  
 [Command and Args](#command-and-args)  
@@ -85,8 +87,28 @@ kubectl top [node | pod]
 ```bash
 # create a temporary pod to run command
 # curl http://[service].[nameserver]:[port]
-kubectl run [pod] --rm --restart=Never --image=(image) -i -- [command] 
+kubectl run [pod] --rm --restart=Never --image=(image) -i -- [command]
+
+# run command inside a pod
+kubectl exec [pod] -it -- [command]
 ```
+
+<br />
+
+## Config
+```bash
+kubectl config view
+
+# change current namespace
+kubectl config set-context --current --namespace=[namespace]
+
+# list contexts
+kubectl config get-contexts
+
+# change context
+kubectl config use-context [context]
+```
+`.kube/config`
 
 <br />
 
@@ -140,7 +162,7 @@ spec:
 
 <img src="canary-service-yaml.png" width="70%">  
 
-<br />
+Create another deploy v2, then divide the replicas between deploy v1 and v2.  
 
 ### Blue Green
 
@@ -150,8 +172,9 @@ spec:
 
 <img src="blue-green-service-yaml.png" width="50%">  
 
-<br />
+Create another deploy v2 then for full deployment, then update service selector to v2.  
 
+<br />
 
 ## Command and Args
 
@@ -403,7 +426,9 @@ k config view
 
 
 `livenessProbe`: If it fails Kubernetes will restart the container.  
-`readinessPobe`: If it fails, the pod is removed from the Service’s load balancer. The container is not restarted, just marked as not ready.  
+`readinessProbe`: If it fails, the pod is removed from the Service’s load balancer. The container is not restarted, just marked as not ready.  
+
+`livenessProbe.tcpSocket.port`: check if port is reachable.  
 
 ---
 
