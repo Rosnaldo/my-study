@@ -4,6 +4,7 @@
 [Container](#container)  
 [Deployment](#deployment)  
 [Deployment Strategies](#deployment-strategies)  
+[Sidecar Container](#sidecar-container)  
 [Command and Args](#command-and-args)  
 [Label](#label)  
 [Service](#service)  
@@ -174,6 +175,16 @@ Create another deploy v2, then divide the replicas between deploy v1 and v2.
 
 Create another deploy v2 then for full deployment, then update service selector to v2.  
 
+<br />
+
+## Sidecar Container
+
+[(see example)](sidecar-container.yaml)
+
+The **init** container will create the initial file `cleaner.log`.  
+**cleaner-con** will send the logs be storaged in the volume.  
+**logger-con** will write content of `cleaner.log` to stdout will comand `tail -f`.  
+The logs will be available on `k logs cleaner`.  
 <br />
 
 ## Command and Args
