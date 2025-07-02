@@ -1,7 +1,8 @@
 # kubernetes
 
 [Config](#config)  
-[Container](#container)  
+[Resource Yaml File](#resource-yaml-file)  
+[Pod](#pod)  
 [Deployment](#deployment)  
 [Deployment Strategies](#deployment-strategies)  
 [Sidecar Container](#sidecar-container)  
@@ -48,7 +49,6 @@ kubectl get [resource] --all-namespaces
 # -A --all-namespaces
 # -n [namespace] specific namespace
 
-
 # current pod status status
 kubectl -n default get pod [pod] -o jsonpath="{.status.phase}"
 
@@ -56,6 +56,15 @@ kubectl [command] [resource] [resource_name]
 # commands: create, delete, edit, describe
 # resources: pod, node, deploy, service, replicaset
 
+
+# edit file vim and upload the updates on save
+kubectl edit pod [pod]
+
+```
+<br />
+
+## Resource Yaml File
+```bash
 # create a new pod yaml file
 kubectl run [pod_name] --image=(image) --dry-run -o yaml > redis.yaml
 # --dry-run // not to run
@@ -69,7 +78,23 @@ kubectl apply -f redis.yaml
 kubectl replace --force -f [file.yaml]
 
 # edit file vim and upload the updates on save
-kubectl edit pod [pod]
+kubectl edit [resource_kind] [resource]
+```
+
+<br />
+
+## Pod
+
+```bash
+# create a temporary pod to run command
+# curl http://[service].[nameserver]:[port]
+kubectl run [pod] --rm --restart=Never --image=(image) -i -- [command]
+
+# forcibly and immediately deletes a pod
+kubectl delete pod [pod] --force --grace-period=0
+
+# run command inside a pod
+kubectl exec [pod] -it -- [command]
 
 # get all logs from container inside the pod
 kubectl logs [pod] -c [container] 
@@ -79,20 +104,8 @@ kubectl logs [pod] -c [container] | grep WARNINGS > /opt/logs.txt
 
 # get nodes cpu and memory consumption  
 kubectl top [node | pod]  
-
 ```
-<br />
 
-## Container
-
-```bash
-# create a temporary pod to run command
-# curl http://[service].[nameserver]:[port]
-kubectl run [pod] --rm --restart=Never --image=(image) -i -- [command]
-
-# run command inside a pod
-kubectl exec [pod] -it -- [command]
-```
 
 <br />
 
@@ -474,6 +487,48 @@ kubectl logs [job]
 ```
 <br />
 
+### Partitioned Task
+
+```yaml
+spec:
+  completions: 100
+  parallelism: 10
+  completionMode: Indexed
+```
+
+`completionMode: Indexed` allow to partition a task because each pod can be uniquely identified.  
+
+
+Each pod is asigned a index.  
+```yaml
+metadata:
+  annotations:
+    batch.kubernetes.io/job-completion-index: "3"
+```
+
+You can asing it on env variable.  
+Say you have 100 input files: data/file_0.csv to data/file_99.csv.  
+
+```yaml
+env:
+- name: JOB_COMPLETION_INDEX
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.annotations['batch.kubernetes.io/job-completion-index']
+
+```
+
+#### When Do You Need Indexed Jobs?  
+Use `completionMode: Indexed` if:
+
+• You need each pod to do a specific part of a larger task (e.g., process file_7.csv).  
+• You want to track completion per task, not just pod success.  
+• You want to retry specific failed indexes.  
+
+Otherwise, standard parallel jobs work fine for generic tasks where every pod does the same kind of work (e.g., pulling from a queue or doing idempotent tasks).  
+
+<br />
+
 ## Cronjob
 [(see example)](cronjob.yaml)
 
@@ -626,6 +681,9 @@ k exec [pod] -it -- env
 
 ### Use configmap as enviroment variable
 [(see pod-env-use-configmap.yaml)](pod-env-use-configmap.yaml)  
+
+### Use configmap as enviroment by each key
+[(see pod-env-use-configmap-by-each-key.yaml)](pod-env-use-configmap-by-each-key.yaml)  
 
 ### Use configmap as mounted volume
 Each key in the Configmap becomes a file in a directory.  
