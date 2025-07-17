@@ -20,7 +20,7 @@
 - Peering Connection action accept request
 
 - add route to PublicRouteTable
-  - <DefaultVPC_ip>, Peering Connection: DemoPeeringConnection
+  - <DefaultVPC_CIDR>, Peering Connection: DemoPeeringConnection
 
 - add route to DefaultRouteTable
   - 10.0.0.0/16, Peering Connection: DemoPeeringConnection

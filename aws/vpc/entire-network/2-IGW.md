@@ -1,4 +1,6 @@
 # create IGW (Internet Gateway) to allow public EC2 to access internet 
+## used for public subnets
+## allow both inbound and outbound traffic
 
 - create a IGW
   - name tag: DemoIGW

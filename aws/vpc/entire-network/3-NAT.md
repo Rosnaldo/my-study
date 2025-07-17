@@ -1,4 +1,5 @@
 # create a NAT (Network Address Translation) to allow private EC2 to access internet
+## allow only outbound traffic
 
 - create a Key Pair
   - name: DemoKeyPair

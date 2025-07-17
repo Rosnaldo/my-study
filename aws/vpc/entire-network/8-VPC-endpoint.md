@@ -1,4 +1,5 @@
 # VPC endpoint to allow access to S3 through the aws internal network
+## endpoint gives access to AWS internal service without necessarily having access to internet
 
 - create new role
   - name: DemoRoleEC2-S3RedOnly

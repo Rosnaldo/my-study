@@ -49,6 +49,9 @@ kubectl get [resource] --all-namespaces
 # -A --all-namespaces
 # -n [namespace] specific namespace
 
+# display api versions and resources short names
+kubectl api-resources
+
 # current pod status status
 kubectl -n default get pod [pod] -o jsonpath="{.status.phase}"
 
@@ -134,18 +137,26 @@ kubectl create deploy httpd-frontend --image=httpd:2.4-alpine --replicas=3
 kubectl set deploy [deployment] [image]
 
 # scale
-kubectl scale deploy --replicas=(num) [deploy]
+kubectl scale deploy --replicas=[num] [deploy]
 
 # rollout
-kubectl rollout status deployment/[deployment]
-kubectl rollout history deployment/[deployment]
+kubectl rollout status deploy [deployment]
+kubectl rollout history deploy [deployment]
 
 # See the pod template spec used in that revision
 # but not the pod execution result (status/errors).
-kubectl rollout history deployment/[deployment] --revision=(number)
+kubectl rollout history deploy [deployment] --revision=[number]
 
-kubectl rollout undo deployment [deployment]
+kubectl rollout undo deploy [deployment]
 ```
+
+### Record a message to rollout history
+
+```bash
+kubectl edit deploy [deploy]
+kubectl annotate deployment [name] kubernetes.io/change-cause="Your message"
+```
+
 
 ```yaml
 spec:
@@ -155,6 +166,9 @@ spec:
       maxUnavailable: 25%
     type: RollingUpdate
 ```
+
+While maxSurge controls how many extra pods can be added (uses more resources),  maxUnavailable limits how many can be missing (ensures some capacity is always up).  
+
 
 ```yaml
 spec:
