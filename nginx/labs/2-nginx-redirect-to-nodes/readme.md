@@ -1,7 +1,8 @@
 <img src="image.png" width="50%">
 
-two node containers and nginx inside the network (backendnet).  
-the `nginx.conf` file is volume binded.  
+• two node containers and nginx inside the network (backendnet).  
+• the `nginx.conf` file is volume binded.  
+• nginx on port 80 redirects to the two node containers.  
 
 ```bash
 docker build . -t nodeapp
@@ -17,8 +18,7 @@ docker network connect backendnet nginx
 ```
 
 #### test ####
-
 ```bash
-curl localhost:8080
-curl localhost:8080
+# should keep switch between the two containers response
+curl localhost:80
 ```
