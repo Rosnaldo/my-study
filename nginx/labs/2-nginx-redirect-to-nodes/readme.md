@@ -15,9 +15,10 @@ docker network create backendnet
 docker network connect backendnet nodeapp1
 docker network connect backendnet nodeapp2
 docker network connect backendnet nginx
+docker restart nginx
 ```
 
-#### test ####
+#### test: ####
 ```bash
 # should keep switch between the two containers response
 curl localhost:80
