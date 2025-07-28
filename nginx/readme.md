@@ -10,6 +10,24 @@ nginx -t -c <nginx.conf>
 nginx -s reload -c <nginx.conf>
 ```
 
+```nginx.conf
+http {
+    server {
+        listen 80;
+        server_name localhost;
+
+        location / {
+            root /var/www/html;
+            index index.html;
+        }
+    }
+}
+
+events {}
+```
+
+
+
 localhost:8080 -> /my-nginx  
 localhost:8080/images -> /my-images  
 localhost:8080/elephant.jpg X blocked  
