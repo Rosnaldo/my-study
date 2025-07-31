@@ -674,10 +674,19 @@ kubectl exec [pod] -it -- df -h
   | **Retain**                      | The PV **remains** but is marked as `Released`. Data remains on disk, manual cleanup is required before reuse.          |
 </details>
 
-
-
 <br />
 
+### Storage Class
+
+<details>
+  <summary><strong>EBS example</strong></summary>
+  StorageClass `volumeBindingMode: WaitForFirstConsumer`, can be important in a Multi-zone or multi-node clusters environment. If the PVC is bound before the pod is scheduled, the scheduler has no ideia which node (or zone) it will run, and might bind the volume to the wrong zone.  
+
+  [(see ebs example)](storage-class/ebs-example/)  
+
+</details>
+
+<br />
 
 ## ConfigMap
 ```bash
