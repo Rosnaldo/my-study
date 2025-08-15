@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    
+    environment {
+        RUN_TESTS = "true"
+    }
+    stages {
+        stage('Setup Python') {
+            steps {
+                sh '''
+                    python3 --version
+                    pip3 --version
+                '''
+            }
+        }
+        stage('Build') {
+            steps {
+                git branch: 'main', url: 'http://git-server:3000/max/python-app.git'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                    python3 -m pip install --upgrade pip
+                    pip install -r requirements.txt
+                    python3 -m pip install pytest
+                '''
+            }
+        }
+        stage('Run Tests') {
+            when {
+                expression { env.RUN_TESTS == 'true' }
+            }
+            steps {
+                sh 'python3 -m pytest --maxfail=1 --disable-warnings -q'
+            }
+        }
+    }
+}
