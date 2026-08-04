@@ -468,6 +468,19 @@ k config view
 
 `livenessProbe.tcpSocket.port`: check if port is reachable.  
 
+`readinessProbe` could check:  
+- database connection
+- Redis
+- external APIs
+- disk
+- internal subsystems
+
+`livenessProbe` check:
+- process is running
+- event loop is not stuck
+
+livenessProbe only check if the proccess is alive to avoid infinity loop in case, for example, the DB connection is broken.
+
 ---
 
 `initialDelaySeconds`: This is the number of seconds to wait after the container starts before Kubernetes performs the first health check.  
@@ -598,7 +611,7 @@ Attach to pods with role "db", allow traffic comming from pods with the label ap
 
 ### example:
 
-<img src="network-policy-example.png" width="70%">  
+<img src="network-policy-example.png" width="50%">  
 
 [(see internal-network-policy.yaml)](internal-network-policy.yaml)  
 [(see payroll-network-policy.yaml)](payroll-network-policy.yaml)  
