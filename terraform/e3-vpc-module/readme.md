@@ -1,1 +1,0 @@
-# terraform.tfvars and *.auto.tfvars are loaded automatically

@@ -1,9 +1,0 @@
-.venv
-.git
-**/__pycache__
-.env
-media
-staticfiles
-.pytest_cache
-.ruff_cache
-htmlcov
